@@ -45,5 +45,6 @@ export default {
   .img-logo{
     max-width: 120px;
     margin: 0 auto;
+    color: #2c3e55;
   }
 </style>
