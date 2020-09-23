@@ -1,12 +1,15 @@
 <template>
     <div class="div-principal">
-        <div>
-            <h2 class="h2">- Start the GAME! -</h2>
+        <div :class="{'lista': !iSorteado}">
+            <!--input type="text" v-model="nome">
+            <input type="text" v-model="email" -->
+            <p>Descrição do Cleinte: {{ addLista.nome }}</p>
+            <p>E-mail : {{ addLista.email }}</p>
         </div>
-        <input class="input-form" type="text" v-model="nomeField" id="name" placeholder="Informe seu Name">
+        <!--input class="input-form" type="text" v-model="nomeField" id="name" placeholder="Informe seu Name">
         <input class="input-form" type="email" v-model="emailField" id="name" placeholder="Informe seu E-mail">
         
-        <button @click="adicionarPessoa" class="btn-style">Add Informação</button>
+        <button @click="adicionarPessoa" class="btn-style">Add Informação</button-->
     </div>
             
 </template>
@@ -15,36 +18,45 @@
 export default {
     data(){
         return {
-            nomeField: "",
-            emailField: "",
-            add: [ 
-                {
-                    id: "",
-                    nome: "",
-                    email: ""
-                } 
-            ]
+            iSorteado: false
         }    
     },
-
-    methods: {
-        adicionarPessoa: function() {
-        this.add.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
-        this.nomeField = "";
-        this.emailField = "";
+    props:{
+        addLista: Object
     }
-  }
+
+    //methods: {
+        //adicionarPessoa: function() {
+        //this.add.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
+        //this.nomeField = "";
+        //this.emailField = "";
+    //}
 }
 </script>
 
 <style scoped>
     .div-principal{
         text-align: center;
-        background-color: darkcyan;
+        background-color: white;
         color: white;
         max-width: 950px;
-        margin: 0 auto;
-        border: 2px solid black ;
+        margin: 1%;
+        margin-top: 1%;
+        padding: 1%;
+    }
+
+    .lista{
+        background-color: gray;
+        color: white;
+        margin: 15px;
+        padding: 1%;
+    }
+
+    .lista-sorteado{
+        background-color: black;
+        color: yellow;
+        margin: 15px;
+        padding: 1%;
     }
 
     .h2{
@@ -61,7 +73,6 @@ export default {
         margin-left: 15px;
         margin-bottom: 15px;
         padding: 5px 5px 5px 5px;
-        border: 1px solid black;
     }
 
     .btn-style{
@@ -70,4 +81,12 @@ export default {
         margin: 5px 5px 5px;
         padding: 5px 5px 5px 2px;
     }
+    .hr{
+        max-width: 95%;
+    }
+
+    hr{
+        max-width: 50%;
+    }
+
 </style>
