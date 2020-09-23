@@ -5,20 +5,17 @@
       <h1>SORTEIO do BRONX</h1>
       <div class="div-principal">
         <h2 class="h2">- Start the GAME! -</h2>
-        <input type="text" v-model="addTeste.nome">
-        <input type="text" v-model="addTeste.email">
+        <input type="text" placeholder="Nome" v-model="nomeField">
+        <input type="email" placeholder="E-mail" v-model="emailField">
+        <button @click="adicionarPessoa" class="btn-style">Add Informação</button>
         <hr class="hr">
-        
-        <AddPessoa :addLista="addTeste"/>
-        <AddPessoa :addLista="addTeste"/>
+        <!-- Adicionando Pessoa a Lista-->
+        <div v-for="(lista,index) in lista" :key="lista.id">
+          <h4>{{ index + 1 }}</h4>
+          <AddPessoa :addLista="lista"/>
+        </div>
+
       </div>
-
-
-
-      <!--div v-for="(AddPessoa,index) in add" :key="AddPessoa.id">
-        <h6>{{index + 1 }}
-        <AddPessoa :add="add"/>
-      </div-->
     </div>
    <div>
    </div>
@@ -33,17 +30,31 @@ export default {
   name: 'App',
   data(){
     return {
-      nomeWN: "WN SANTOS",
-      emailWN: "juca@gmail.com",
-      addTeste: {
-        nome: "Teste",
-        email: "teste@gmail"
-      }
+      nomeField: "",
+      emailField: "",
+      lista: [ {
+        id: "1",
+        nome: "WN Silva",
+        email: "wn.silva@gmail.com"
+        },{
+        id: "2",
+        nome: "WN Santos",
+        email: "wn.santos@gmail.com"
+        },
+      ]
     }    
   },
   components: {
     AddPessoa,
   },
+  
+  methods: {
+    adicionarPessoa: function() {
+    this.lista.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
+    this.nomeField = "";
+    this.emailField = "";
+    }
+  }  
 }
 </script>
 

@@ -1,10 +1,9 @@
 <template>
     <div class="div-principal">
-        <div :class="{'lista': !iSorteado}">
-            <!--input type="text" v-model="nome">
-            <input type="text" v-model="email" -->
+        <div :class="{'lista': !iSorteado,'lista-sorteado': iSorteado}">
             <p>Descrição do Cleinte: {{ addLista.nome }}</p>
             <p>E-mail : {{ addLista.email }}</p>
+            <button @click="corSorteada" class="btn-style">Mudar Cor</button>
         </div>
         <!--input class="input-form" type="text" v-model="nomeField" id="name" placeholder="Informe seu Name">
         <input class="input-form" type="email" v-model="emailField" id="name" placeholder="Informe seu E-mail">
@@ -23,14 +22,12 @@ export default {
     },
     props:{
         addLista: Object
-    }
-
-    //methods: {
-        //adicionarPessoa: function() {
-        //this.add.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
-        //this.nomeField = "";
-        //this.emailField = "";
-    //}
+    },
+    methods:{
+        corSorteada: function(){
+            this.iSorteado = !this.iSorteado;
+        }
+    } 
 }
 </script>
 
