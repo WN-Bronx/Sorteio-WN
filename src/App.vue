@@ -3,10 +3,11 @@
     <div id="app">
       <img class="img-responsive img-logo" src="@/assets/photo.png" alt="Logo">
       <h1>SORTEIO do BRONX</h1>
-      <div v-for="(AddPessoa,index) in add" :key="add.id">
+      <!-- div v-for="(AddPessoa,index) in add" key="add.id">
         <h6>{{index + 1 }}
         <AddPessoa :add="add"/>
-      </div>
+      </div-->
+      <AddPessoa/>
     </div>
    <div>
    </div>
