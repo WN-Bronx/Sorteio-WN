@@ -38,12 +38,7 @@ export default {
       deuErro: false,
       nomeField: "",
       emailField: "",
-      lista: [ {
-        id: "1",
-        nome: "WN SANTOS",
-        email: "teste@teste.com" 
-        }
-      ]
+      lista: []
     }    
   },
   components: {
