@@ -5,14 +5,15 @@
       <h1>SORTEIO do BRONX</h1>
       <div class="div-principal">
         <h2 class="h2">- Start the GAME! -</h2>
-        <input type="text" placeholder="Nome" v-model="nomeField">
-        <input type="email" placeholder="E-mail" v-model="emailField">
+        <input type="text" placeholder="Nome" required="required" v-model="nomeField" autofocus>
+        <small id="error" v-show="deuErro">Informação inválida !</small>
+        <input type="email" placeholder="E-mail" required="required" v-model="emailField">
         <button @click="adicionarPessoa" class="btn-style">Add Informação</button>
         <hr class="hr">
         <!-- Adicionando Pessoa a Lista-->
         <div v-for="(lista,index) in lista" :key="lista.id">
           <h4>{{ index + 1 }}</h4>
-          <AddPessoa :addLista="lista"/>
+          <AddPessoa :addLista="lista" @meDelete="deletarPessoaLista($event)" />
         </div>
 
       </div>
@@ -30,17 +31,14 @@ export default {
   name: 'App',
   data(){
     return {
+      deuErro: false,
       nomeField: "",
       emailField: "",
       lista: [ {
         id: "1",
-        nome: "WN Silva",
-        email: "wn.silva@gmail.com"
-        },{
-        id: "2",
-        nome: "WN Santos",
-        email: "wn.santos@gmail.com"
-        },
+        nome: "WN SANTOS",
+        email: "teste@teste.com" 
+        }
       ]
     }    
   },
@@ -50,9 +48,19 @@ export default {
   
   methods: {
     adicionarPessoa: function() {
-    this.lista.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
-    this.nomeField = "";
-    this.emailField = "";
+      if (this.nomeField == "" || this.nomeField.length < 1 ) {
+          this.deuErro = true;
+      } else {
+        this.lista.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
+        this.nomeField = "";
+        this.emailField = "";
+        this.deuErro = false;
+      } 
+    },
+    deletarPessoaLista: function($event) {
+      var id = $event.idPessoa;
+      var novoArray = this.lista.filter(lista=> lista.id != id);
+      this.lista = novoArray;
     }
   }  
 }
@@ -89,6 +97,9 @@ export default {
     margin-top: 60px;
   }
 
+  #error {
+    color: red;
+  }
   .img-logo{
     max-width: 120px;
     margin: 0 auto;

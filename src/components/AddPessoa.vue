@@ -4,11 +4,8 @@
             <p>Descrição do Cleinte: {{ addLista.nome }}</p>
             <p>E-mail : {{ addLista.email }}</p>
             <button @click="corSorteada" class="btn-style">Mudar Cor</button>
+            <button @click="eventoExcluir" class="btn-style">Excluir</button>
         </div>
-        <!--input class="input-form" type="text" v-model="nomeField" id="name" placeholder="Informe seu Name">
-        <input class="input-form" type="email" v-model="emailField" id="name" placeholder="Informe seu E-mail">
-        
-        <button @click="adicionarPessoa" class="btn-style">Add Informação</button-->
     </div>
             
 </template>
@@ -26,6 +23,9 @@ export default {
     methods:{
         corSorteada: function(){
             this.iSorteado = !this.iSorteado;
+        },
+        eventoExcluir: function(){
+          this.$emit("meDelete", {idPessoa: this.addLista.id, components: this});
         }
     } 
 }
