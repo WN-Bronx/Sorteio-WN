@@ -10,6 +10,9 @@
         <input type="email" placeholder="E-mail" required="required" v-model="emailField">
         <button @click="adicionarPessoa" class="btn-style">Add Informação</button>
         <hr class="hr">
+        <h2 class="h2">- Click aqui para Ordernar! -</h2>
+        <button @click="orderLista" class="btn-style">- ↑ ↓ -</button>
+        <hr class="hr">
         <!-- Adicionando Pessoa a Lista-->
         <div v-for="(lista,index) in lista" :key="lista.id">
           <h4>{{ index + 1 }}</h4>
@@ -25,7 +28,8 @@
 
 <script>
 
-import AddPessoa from './components/AddPessoa'
+import _ from 'lodash';
+import AddPessoa from './components/AddPessoa';
 
 export default {
   name: 'App',
@@ -48,7 +52,7 @@ export default {
   
   methods: {
     adicionarPessoa: function() {
-      if (this.nomeField == "" || this.nomeField.length < 1 ) {
+      if (this.nomeField == "" || this.nomeField.length < 1) {
           this.deuErro = true;
       } else {
         this.lista.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
@@ -61,6 +65,11 @@ export default {
       var id = $event.idPessoa;
       var novoArray = this.lista.filter(lista=> lista.id != id);
       this.lista = novoArray;
+    }
+  },
+  computed:{
+    orderLista: function(){
+      return _.orderBy(this.lista,['nome'], ['asc']);
     }
   }  
 }
