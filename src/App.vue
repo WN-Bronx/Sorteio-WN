@@ -14,8 +14,9 @@
         <button @click="orderLista" class="btn-style">- ↑ ↓ -</button>
         <hr class="hr">
         <!-- Adicionando Pessoa a Lista-->
-        <div v-for="(lista,index) in lista" :key="lista.id">
-          <h4>{{ index + 1 }}</h4>
+        <!--div v-for="(lista,index) in lista" :key="lista.id"-->
+        <div v-for="lista in lista" :key="lista.id">
+          <!-- h4>{{ index + 1 }}</h4-->
           <AddPessoa :addLista="lista" @meDelete="deletarPessoaLista($event)" />
         </div>
 

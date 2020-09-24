@@ -1,20 +1,22 @@
 <template>
     <div class="div-principal">
         <div :class="{'lista': !iSorteado,'lista-sorteado': iSorteado}">
-            <p>Descrição do Cleinte: {{ addLista.nome }}</p>
-            <p>E-mail : {{ addLista.email }}</p>
-            <button @click="corSorteada" class="btn-style">Mudar Cor</button>
-            <button @click="eventoExcluir" class="btn-style">Excluir</button>
+            <form @submit.prevent="salvar" v-if="pessoaEditar">
+                <p>Descrição do Cleinte: {{ addLista.nome }}</p>
+                <p>E-mail : {{ addLista.email }}</p>
+                <button @click="corSorteada" class="btn-style">Mudar Cor</button>
+                <button @click="eventoExcluir" class="btn-style">Excluir</button>
+            </form>    
         </div>
-    </div>
-            
+    </div>        
 </template>
 
 <script>
 export default {
     data(){
         return {
-            iSorteado: false
+            iSorteado: false,
+            pessoaEditar: null
         }    
     },
     props:{
@@ -26,7 +28,15 @@ export default {
         },
         eventoExcluir: function(){
           this.$emit("meDelete", {idPessoa: this.addLista.id, components: this});
+        },
+        salvar() {
+            this.$emit('save', this.pessoaEditar)
         }
+    },
+    watch: {
+        pessoa: function(val) {
+            this.pessoaEditar = val
+        } 
     } 
 }
 </script>
@@ -85,5 +95,4 @@ export default {
     hr{
         max-width: 50%;
     }
-
 </style>
