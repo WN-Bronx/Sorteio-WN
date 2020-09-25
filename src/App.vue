@@ -1,112 +1,152 @@
 <template>
-  <div class="principal">
-    <div id="app">
-      <img class="img-responsive img-logo" src="@/assets/photo.png" alt="Logo">
-      <h1>SORTEIO do BRONX</h1>
-      <div class="div-principal">
-        <h2 class="h2">- Start the GAME! -</h2>
-        <input type="text" placeholder="Nome" required="required" v-model="nomeField" autofocus>
-        <small id="error" v-show="deuErro">Informação inválida !</small>
-        <input type="email" placeholder="E-mail" required="required" v-model="emailField">
-        <button @click="adicionarPessoa" class="btn-style">Add Informação</button>
-        <hr class="hr">
-        <h2 class="h2">- Click aqui para Ordernar! -</h2>
-        <button @click="orderLista" class="btn-style">- ↑ ↓ -</button>
-        <hr class="hr">
-        <!-- Adicionando Pessoa a Lista-->
-        <!--div v-for="(lista,index) in lista" :key="lista.id"-->
-        <div v-for="lista in lista" :key="lista.id">
-          <!-- h4>{{ index + 1 }}</h4-->
-          <AddPessoa :addLista="lista" @meDelete="deletarPessoaLista($event)" />
-        </div>
+  <div>
+    <button class="button is-primary" @click="adicionar">Adicionar</button>
+    <table class="table is-bordered tudo">
+        <thead>
+          <tr>
+              <td colspan="5">
+                <input type="text" class="input" v-model="filtro" placeholder="Filtro"/>
+                <button class="button" @click="sortearPessoa">Sortear uma Pessoa</button>
+                
+              </td>
+          </tr>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr v-for="p in pessoasFiltradas" :key="p.id">
+              <td> {{p.nome}} </td>
+              <td> {{p.email}} </td>
+              <td>
+                  <button class="button" @click="editar(p)">Editar</button>
+                  <button class="button" @click="excluir(p)">Excluir</button>
+              </td>
+          </tr>
+        </tbody>
+    </table>
+    <cadastro-pessoa :show="showForm" :pessoa="pessoaEditar" @close="showForm = false" @save="salvar" > </cadastro-pessoa>       
+  </div>
 
-      </div>
-    </div>
-   <div>
-   </div>
-  </div>  
 </template>
 
 <script>
+import CadastroPessoa from "./components/CadastroPessoa"
 
-import _ from 'lodash';
-import AddPessoa from './components/AddPessoa';
-
-export default {
-  name: 'App',
-  data(){
-    return {
-      deuErro: false,
-      nomeField: "",
-      emailField: "",
-      lista: []
-    }    
-  },
+export default { 
   components: {
-    AddPessoa,
+    CadastroPessoa
+  },  
+  name: 'app',
+  data () {
+    return {
+      pessoas: [],
+      filtro:"",      
+      pessoaEditar: null,
+      showForm: false,
+    }
   },
-  
-  methods: {
-    adicionarPessoa: function() {
-      if (this.nomeField == "" || this.nomeField.length < 1) {
-          this.deuErro = true;
-      } else {
-        this.lista.push({nome: this.nomeField, email:this.emailField, id:Date.now()})
-        this.nomeField = "";
-        this.emailField = "";
-        this.deuErro = false;
-      } 
+  methods: { 
+    adicionar() {
+        this.pessoaEditar = {
+            id: null,
+            nome: '',
+            email: ''
+        },
+        this.showForm = true;
+    },  
+
+    inserir (pessoa) {
+        let pessoaAdicionar = Object.assign({}, pessoa);
+        pessoaAdicionar.id = this.pessoas.length + 1;
+        this.pessoas.push(pessoaAdicionar);
     },
-    deletarPessoaLista: function($event) {
-      var id = $event.idPessoa;
-      var novoArray = this.lista.filter(lista=> lista.id != id);
-      this.lista = novoArray;
-    }
+
+    alterar (pessoa) {
+        let idx = this.pessoas.findIndex(c => {
+            return c.id == pessoa.id;
+        });
+        if (idx > -1) {
+            this.pessoas[idx] = pessoa;
+            this.$set(this.pessoas, idx, this.pessoas[idx]);
+        }
+    },
+
+    editar(pessoa) {
+        this.pessoaEditar = Object.assign({}, pessoa);
+        this.showForm = true;
+    },
+
+    excluir(pessoa) {
+        if (confirm("Excluir registro?")) {
+            this.pessoas.splice(this.pessoas.indexOf(pessoa), 1);
+        }
+    },
+
+    salvar(pessoa) {
+        if (pessoa.id == null) {
+            this.inserir(pessoa);
+        }
+        else
+        {
+            this.alterar(pessoa);
+        }
+        this.showForm = false;
+    }, 
+   
+    sortearPessoa: function() {
+      if (this.pessoas.length > 0) {
+          var pos = Math.floor(Math.random() * (this.pessoas.length));
+          this.filtro = this.pessoas[pos].nome;
+      }
+      else
+        alert("Nenhum registro cadastrado!");
+    } 
+
   },
-  computed:{
-    orderLista: function(){
-      return _.orderBy(this.lista,['nome'], ['asc']);
-    }
-  }  
+
+  computed: {
+      pessoasFiltradas: function() {
+        if (this.filtro == '') {
+          return this.pessoas
+        }
+        return this.pessoas.filter(c => {
+            return c.nome.startsWith(this.filtro)
+        })
+      },   
+  }, 
+
 }
 </script>
 
 <style>
-  .div-principal{
-    text-align: center;
-    background-color: darkcyan;
-    color: black;
-    max-width: 950px;
-    margin: 0 auto;
-    margin-top: 1%;
-    border: 2px solid black ;
-  }
 
-  .h2{
-    color: black;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
-    font-style: oblique;
-  }
-  
-  .hr{
-    max-width: 95%;
-  }
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+h1, h2 {
+  font-weight: normal;
+}
 
-  #error {
-    color: red;
-  }
-  .img-logo{
-    max-width: 120px;
-    margin: 0 auto;
-  }
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}
 </style>
